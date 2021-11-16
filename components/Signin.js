@@ -16,7 +16,7 @@ export function Signin( props ) {
     }, [props.auth])
     return (
         <View style={styles.container}>
-          <Text>Sign up</Text>
+          <Text>Sign in</Text>
           <KeyboardAvoidingView 
             behavior={Platform.OS === "ios" ? "padding" : "height"}
           >
@@ -33,7 +33,6 @@ export function Signin( props ) {
             /> */}
             <TextInput style={styles.input} secureTextEntry={true} />
             <TouchableOpacity style={styles.button} >
-              <Text style={styles.buttonText}>Sign up</Text>
               <Text style={styles.buttonText}>Sign in</Text>
             </TouchableOpacity>
             <Feedback message="Test error" />

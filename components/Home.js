@@ -7,10 +7,10 @@ export function Home( props ) {
     const navigation = useNavigation()
 
     useEffect(() => {
-        navigation.setOptions({
-            HeaderRight: (props) => <Signout {...props} />
-        })
-    })
+        if(props.auth) {
+            navigation.reset({index: 0, route: [{name: 'Signin'}]})
+        }
+    }, [props.auth])
     return(
         <View>
             <Text>Home</Text>

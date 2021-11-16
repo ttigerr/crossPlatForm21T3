@@ -100,7 +100,7 @@ export default function App() {
         </Stack.Screen>
         <Stack.Screen name="Home Screen" options={{
           handlerTitle:"Home",
-          headerRight: (props) => <Signout {...props}/>
+          headerRight: (props) => <Signout {...props} handler={SignoutHandler}/>
         }}>
           {(props) => 
           <Home {...props} auth={auth}
