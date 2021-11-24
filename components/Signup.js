@@ -1,90 +1,90 @@
-import React , {useState, useEffect}from 'react'
+import React, {useState,useEffect} from 'react'
 import { View, Text, StyleSheet, Button, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { ThemeColours } from './ThemeColours';
 import { Feedback } from './Feedback';
 
 export function Signup(props) {
+  const[validEmail, setValidEmail ] = useState( false )
+  const[validPassword,setValidPassword ] = useState( false )
+  const[validForm,setValidForm] = useState(false)
 
-    const[validEmail, setValidEmail] = useState(false)
-    const[validPassword, setValidPassword] = useState(false)
-    const[validForm, setValidForm] = useState(false)
+  const[email,setEmail] = useState()
+  const[password,setPassword] = useState()
 
-    const[email, setEmail] = useState()
-    const[password, setPassword] = useState()
+  const navigation = useNavigation()
 
-    const navigation = useNavigation()
-    const validateEmail = (emailVal) => {
-        if(emailVal.indexOf('@') > 0) {
-            setValidEmail(true)
-        }
-        else {
-            setValidEmail(emailVal)
-        }
-        setEmail( emailVal )
+  const validateEmail = ( emailVal ) => {
+    if( emailVal.indexOf('@') > 0 ) {
+      setValidEmail( true )
     }
-    const validatePassword = (passwordVal) => {
-        if(passwordVal.length >= 8) {
-            setValidPassword(true)
-        }
-        else {
-            setValidPassword(passwordVal)
-        }
-        setPassword(passwordVal)
+    else {
+      setValidEmail( false )
     }
+    setEmail( emailVal )
+  }
 
-    const submitHandler = () => {
-      console.log('submitting')
-      props.handler( email, password )
+  const validatePassword = ( passwordVal ) => {
+    if( passwordVal.length >= 8 ) {
+      setValidPassword( true )
     }
+    else {
+      setValidPassword( false )
+    }
+    setPassword( passwordVal )
+  }
 
-    useEffect(() => {
-        if(validEmail && validPassword)
-        {
-            setValidForm(true)
-        }
-        else {
-            setValidForm(false)
-        }
-    } ,[validEmail, validPassword])
+  const submitHandler = () => {
+    props.handler( email, password )
+  }
 
-    useEffect( () => {
-      if( props.auth === true ) {
-        navigation.reset({ index: 0, routes: [ {name: 'Home'} ] })
-      }
-    }, [props.auth])
-  
+  useEffect( () => {
+    if(validEmail && validPassword) {
+      setValidForm( true )
+    }
+    else {
+      setValidForm( false )
+    }
+  }, [validEmail, validPassword])
 
-    return (
-      <View style={styles.container}>
-        <Text>Sign up</Text>
-        <KeyboardAvoidingView 
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+  useEffect( () => {
+    if( props.auth === true ) {
+      navigation.reset({ index: 0, routes: [ {name: 'Home'} ] })
+    }
+  }, [props.auth])
+
+  return (
+    <View style={styles.container}>
+      <Text>Sign up</Text>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+      <View style={styles.inner}>
+        <Text>Email</Text>
+        <TextInput style={styles.input} onChangeText={ (val) => validateEmail(val) }/>
+        <Text>Password</Text>
+        <TextInput 
+        style={styles.input} 
+        onChangeText={ (val) => validatePassword(val) }
+        secureTextEntry={true} 
+        />
+        <TouchableOpacity 
+          style={ (validForm) ? styles.button : styles.buttonDisabled} 
+          disabled={ (validForm) ? false : true }
+          onPress={ () => submitHandler() }
         >
-        <View style={styles.inner}>
-          <Text>Email</Text>
-          <TextInput style={styles.input} onChangeText={ (val) => validateEmail(val) }/>
-          <Text>Password</Text>
-          <TextInput 
-          style={styles.input} 
-          onChangeText={ (val) => validatePassword(val) }
-          secureTextEntry={true} 
-          />
-          <TouchableOpacity 
-            style={ (validForm) ? styles.button : styles.buttonDisabled} 
-            disabled={ (validForm) ? false : true }
-            onPress={ () => submitHandler() }
-          >
-            <Text style={styles.buttonText}>Sign up</Text>
-          </TouchableOpacity>
-          <Feedback message={props.error} />
-          <Text>Already have an account?</Text>
+          <Text style={styles.buttonText}>Sign up</Text>
+        </TouchableOpacity>
+        <Feedback message={props.error} />
+        <View style={styles.meta}>
+          <Text style={styles.metaText}>Already have an account?</Text>
           <Button title="Click here to sign in" onPress={() => navigation.navigate("Signin")} />
         </View>
-        </KeyboardAvoidingView>
-        
       </View>
-    )
+      </KeyboardAvoidingView>
+      
+    </View>
+  )
 }
 
 const styles = StyleSheet.create( {
@@ -100,7 +100,7 @@ const styles = StyleSheet.create( {
     padding: 10,
     borderRadius: 10,
   },
-  buttonDisable: {
+  buttonDisabled: {
     marginVertical: 15,
     backgroundColor: ThemeColours.ceriseLight,
     padding: 10,
@@ -122,5 +122,13 @@ const styles = StyleSheet.create( {
   },
   kb: {
     flex: 1,
-  }
+  },
+  meta: {
+    backgroundColor: ThemeColours.culturedTranslucent,
+    padding: 10,
+    borderRadius: 10,
+  },
+  metaText: {
+    textAlign: 'center',
+  },
 })
